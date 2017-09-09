@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace可以理解成虚拟文件夹-->
+<mapper namespace="org.lanqiao.dao.ClassesDao">
+
+    <select id="findAllClass" resultMap="findClass">
+        SELECT * FROM teacher t,course c WHERE t.t_id=c.t_id
+    </select>
+    <resultMap id="findClass" type="org.lanqiao.bean.Classes">
+        <id property="tId" column="t_id" />
+        <result property="tName" column="t_name" />
+        <association property="course" javaType="org.lanqiao.bean.Course">
+            <id property="cId" column="c_id" />
+            <result property="cName" column="c_name" />
+        </association>
+    </resultMap>
+
+    <select id="findInfoById" parameterType="Integer" resultMap="findInfo">
+        SELECT * FROM student s,teacher t,classes c WHERE s.s_id=c.c_id AND t.t_id=c.c_id AND c.c_id=#{cId}
+    </select>
+    <resultMap id="findInfo" type="org.lanqiao.bean.ClassNum">
+        <id property="cId" column="c_id" />
+        <association property="teacher" javaType="org.lanqiao.bean.Teacher">
+            <id property="tId" column="t_id" />
+            <result property="tName" column="t_name" />
+        </association>
+
+        <collection property="studentList" ofType="org.lanqiao.bean.Student">
+            <id property="sId" column="s_id" />
+            <result property="sName" column="s_name" />
+            <result property="sAge" column="s_age" />
+            <result property="sSex" column="s_sex" />
+            <result property="sBirthday" column="s_birthday" />
+        </collection>
+    </resultMap>
+</mapper>
